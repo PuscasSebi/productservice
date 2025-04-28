@@ -3,8 +3,8 @@ package br.com.siecola.productsservice.products.enums;
 import org.springframework.http.HttpStatus;
 
 public enum ProductErrors {
-    PRODUCT_NOT_FOUND("Product not found", HttpStatus.NOT_FOUND);
-
+    PRODUCT_NOT_FOUND("Product not found", HttpStatus.NOT_FOUND),
+    PRODUCT_CODE_ALREADY_EXISTS("Product code already exists", HttpStatus.CONFLICT);
 
     private final String message;
     private final HttpStatus httpStatus;

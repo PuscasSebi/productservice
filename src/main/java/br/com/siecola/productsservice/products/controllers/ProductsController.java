@@ -31,15 +31,26 @@ public class ProductsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
-        LOG.info("Get all products");
-        List<ProductDto> productsDto = new ArrayList<>();
+    public ResponseEntity<?> getAllProducts(@RequestParam(required = false) String code)
+            throws ProductException {
+        if (code != null) {
+            LOG.info("Get product by cod: {}", code);
+            Product productByCode = productsRepository.getByCode(code).join();
+            if (productByCode != null) {
+                return new ResponseEntity<>(new ProductDto(productByCode), HttpStatus.OK);
+            } else {
+                throw new ProductException(ProductErrors.PRODUCT_NOT_FOUND, null);
+            }
+        } else {
+            LOG.info("Get all products");
+            List<ProductDto> productsDto = new ArrayList<>();
 
-        productsRepository.getAll().items().subscribe(product -> {
-            productsDto.add(new ProductDto(product));
-        }).join();
+            productsRepository.getAll().items().subscribe(product -> {
+                productsDto.add(new ProductDto(product));
+            }).join();
 
-        return new ResponseEntity<>(productsDto, HttpStatus.OK);
+            return new ResponseEntity<>(productsDto, HttpStatus.OK);
+        }
     }
 
     @GetMapping("{id}")

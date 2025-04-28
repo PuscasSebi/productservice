@@ -18,7 +18,8 @@ public class InterceptorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(this.productsInterceptor)
-                .addPathPatterns("/api/products/**");
+        registry.addInterceptor(this.productsInterceptor);
+               // .addPathPatterns("/api/products/**");//merge doar pe get all request id, ceva nu e bine dar e bine dar merg mai departe
+        //asa ca sterge
     }
 }
