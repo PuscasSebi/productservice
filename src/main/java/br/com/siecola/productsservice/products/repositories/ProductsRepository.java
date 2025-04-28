@@ -60,8 +60,8 @@ public class ProductsRepository {
                                         .partitionValue(code)
                                 .build()))
                 .build()).subscribe(pg -> products.addAll(pg.items())).join();
-        LOG.info("found products: {}", products);
-        if (products.size() > 0){
+        LOG.info("by code {} found products: {}", code, products);
+        if (products.size() > 0) {
             return CompletableFuture.completedFuture(products.get(0));
         } else {
             return CompletableFuture.completedFuture(null);
