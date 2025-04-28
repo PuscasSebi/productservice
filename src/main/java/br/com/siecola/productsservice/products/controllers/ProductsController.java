@@ -1,6 +1,8 @@
 package br.com.siecola.productsservice.products.controllers;
 
 import br.com.siecola.productsservice.products.dto.ProductDto;
+import br.com.siecola.productsservice.products.enums.ProductErrors;
+import br.com.siecola.productsservice.products.exceptions.ProductException;
 import br.com.siecola.productsservice.products.models.Product;
 import br.com.siecola.productsservice.products.repositories.ProductsRepository;
 import com.amazonaws.xray.spring.aop.XRayEnabled;
@@ -41,13 +43,13 @@ public class ProductsController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getProductById(@PathVariable("id") String id) {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") String id) throws ProductException {
         Product product = productsRepository.getById(id).join();
         if (product != null) {
-            LOG.info("Product get by - ID: {}", id);
+            LOG.info("Get product by its id: {}", id);
             return new ResponseEntity<>(new ProductDto(product), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>( "Product not found", HttpStatus.NOT_FOUND);
+            throw new ProductException(ProductErrors.PRODUCT_NOT_FOUND, id);
         }
     }
 
@@ -62,26 +64,26 @@ public class ProductsController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteProductById(@PathVariable("id") String id) {
+    public ResponseEntity<ProductDto> deleteProductById(@PathVariable("id") String id) throws ProductException {
         Product productDeleted = productsRepository.deleteById(id).join();
         if (productDeleted != null) {
             LOG.info("Product deleted - ID: {}", productDeleted.getId());
             return new ResponseEntity<>(new ProductDto(productDeleted), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+            throw new ProductException(ProductErrors.PRODUCT_NOT_FOUND, id);
         }
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateProduct(@RequestBody ProductDto productDto,
-                                           @PathVariable("id") String id) {
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto,
+                                                    @PathVariable("id") String id) throws ProductException {
         try {
             Product productUpdated = productsRepository
                     .update(ProductDto.toProduct(productDto), id).join();
             LOG.info("Product updated - ID: {}", productUpdated.getId());
             return new ResponseEntity<>(new ProductDto(productUpdated), HttpStatus.OK);
         } catch (CompletionException e) {
-            return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+            throw new ProductException(ProductErrors.PRODUCT_NOT_FOUND, id);
         }
     }
 }
