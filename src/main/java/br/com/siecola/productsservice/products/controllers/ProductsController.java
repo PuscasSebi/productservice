@@ -65,7 +65,7 @@ public class ProductsController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) throws ProductException {
         Product productCreated = ProductDto.toProduct(productDto);
         productCreated.setId(UUID.randomUUID().toString());
         productsRepository.create(productCreated).join();
