@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 public class ProductsExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger LOG = LogManager.getLogger(ProductsExceptionHandler.class);
 
+
     @ExceptionHandler(value = { ProductException.class })
     protected ResponseEntity<Object> handelProductError(ProductException productException, WebRequest webRequest) {
         ProductErrorResponse productErrorResponse = new ProductErrorResponse(
@@ -23,6 +24,7 @@ public class ProductsExceptionHandler extends ResponseEntityExceptionHandler {
                 ThreadContext.get("requestId"),
                 productException.getProductId()
         );
+
 
         LOG.error(productException.getProductErrors().getMessage());
 

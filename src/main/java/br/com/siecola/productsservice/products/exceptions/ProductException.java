@@ -8,6 +8,7 @@ public class ProductException extends Exception {
     @Nullable
     private final String productId;
 
+
     public ProductException(ProductErrors productErrors, @Nullable String productId) {
         this.productErrors = productErrors;
         this.productId = productId;
