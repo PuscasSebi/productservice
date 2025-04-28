@@ -3,6 +3,7 @@ package br.com.siecola.productsservice.products.controllers;
 import br.com.siecola.productsservice.products.dto.ProductDto;
 import br.com.siecola.productsservice.products.models.Product;
 import br.com.siecola.productsservice.products.repositories.ProductsRepository;
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.concurrent.CompletionException;
 
 @RestController
 @RequestMapping("/api/products")
+@XRayEnabled
 public class ProductsController {
     private static final Logger LOG = LogManager.getLogger(ProductsController.class);
     private final ProductsRepository productsRepository;
