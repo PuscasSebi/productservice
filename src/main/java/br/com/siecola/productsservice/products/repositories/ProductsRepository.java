@@ -60,7 +60,8 @@ public class ProductsRepository {
                                         .partitionValue(code)
                                 .build()))
                 .build()).subscribe(pg -> products.addAll(pg.items())).join();
-        if (products.size()> 0){
+        LOG.info("found products: {}", products);
+        if (products.size() > 0){
             return CompletableFuture.completedFuture(products.get(0));
         } else {
             return CompletableFuture.completedFuture(null);
@@ -72,12 +73,12 @@ public class ProductsRepository {
         Product product = null;
         try {
             product = productCompletableFuture.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
+            LOG.info("found product: {}", product);
+        } catch (InterruptedException |ExecutionException e) {
+            LOG.error("error product searching: {}", e);
             throw new RuntimeException(e);
         }
-        if (product!= null){
+        if (product != null){
             return getById(product.getId());
         } else {
             return null;
