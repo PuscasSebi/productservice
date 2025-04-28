@@ -97,7 +97,7 @@ public class ProductsRepository {
         product.setId(productId);
         Product productWithSameCode = checkIfCodeExists(product.getCode()).join();
         if (productWithSameCode != null && !productWithSameCode.getId().equals(product.getId())) {
-            throw new ProductException(ProductErrors.PRODUCT_CODE_ALREADY_EXISTS, productWithSameCode.getId());
+            return getById(productWithSameCode.getId());
         }
         return productsTable.updateItem(
                 UpdateItemEnhancedRequest.builder(Product.class)

@@ -31,9 +31,35 @@ public class ProductsController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllProducts(@RequestParam(required = false) String code)
+    public ResponseEntity<?> getAllProducts(@RequestParam(required = false, name = "code") String code)
             throws ProductException {
+
         if (code != null) {
+            code = code.strip().trim();
+            LOG.info("Get product by cod: {}", code);
+            Product productByCode = productsRepository.getByCode(code).join();
+            if (productByCode != null) {
+                return new ResponseEntity<>(new ProductDto(productByCode), HttpStatus.OK);
+            } else {
+                throw new ProductException(ProductErrors.PRODUCT_NOT_FOUND, null);
+            }
+        } else {
+            LOG.info("Get all products");
+            List<ProductDto> productsDto = new ArrayList<>();
+
+            productsRepository.getAll().items().subscribe(product -> {
+                productsDto.add(new ProductDto(product));
+            }).join();
+
+            return new ResponseEntity<>(productsDto, HttpStatus.OK);
+        }
+    }
+    @GetMapping("v2/{pathParam}")
+    public ResponseEntity<?> getProduct(@PathVariable("pathParam") String code)
+            throws ProductException {
+
+        if (code != null) {
+            code = code.strip().trim();
             LOG.info("Get product by cod: {}", code);
             Product productByCode = productsRepository.getByCode(code).join();
             if (productByCode != null) {
