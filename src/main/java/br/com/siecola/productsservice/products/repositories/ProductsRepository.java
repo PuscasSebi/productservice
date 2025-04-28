@@ -69,15 +69,8 @@ public class ProductsRepository {
     }
 
     public CompletableFuture<Product> getByCode(String productCode)  {
-        CompletableFuture<Product> productCompletableFuture = checkIfCodeExists(productCode);
-        Product product = null;
-        try {
-            product = productCompletableFuture.get();
-            LOG.info("found product: {}", product);
-        } catch (InterruptedException |ExecutionException e) {
-            LOG.error("error product searching: {}", e);
-            throw new RuntimeException(e);
-        }
+        Product product = checkIfCodeExists(productCode).join();
+
         if (product != null){
             return getById(product.getId());
         } else {
