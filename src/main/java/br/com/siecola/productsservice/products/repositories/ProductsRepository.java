@@ -54,7 +54,7 @@ public class ProductsRepository {
 
     private CompletableFuture<Product> checkIfCodeExists(String code) {
         List<Product> products = new ArrayList<>();
-        productsTable.index("codeIndex").query(QueryEnhancedRequest.builder()
+        productsTable.index("codeIdx").query(QueryEnhancedRequest.builder()
                         .limit(1)
                         .queryConditional(QueryConditional.keyEqualTo(Key.builder()
                                         .partitionValue(code)
