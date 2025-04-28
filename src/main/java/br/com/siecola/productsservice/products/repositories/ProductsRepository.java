@@ -1,7 +1,10 @@
 package br.com.siecola.productsservice.products.repositories;
 
+import br.com.siecola.productsservice.products.controllers.ProductsController;
 import br.com.siecola.productsservice.products.models.Product;
 import com.amazonaws.xray.spring.aop.XRayEnabled;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -16,6 +19,9 @@ import java.util.concurrent.CompletableFuture;
 public class ProductsRepository {
 
     private final DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient;
+
+    private static final Logger LOG = LogManager.getLogger(ProductsRepository.class);
+
 
     private DynamoDbAsyncTable<Product> productsTable;
     @Autowired
@@ -33,6 +39,7 @@ public class ProductsRepository {
     }
 
     public CompletableFuture<Product> getById(String productId) {
+        LOG.info("productId: {}", productId);
         return productsTable.getItem(Key.builder()
                         .partitionValue(productId)
                 .build());
