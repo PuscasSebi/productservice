@@ -46,7 +46,7 @@ tasks.register("unpack", Copy) {
 	into("build/libs")
 }
 
-jib.to.image = 'productsservice:1.0.3'
+jib.to.image = 'productsservice:1.1.0'
 
 tasks.named("bootBuildImage") {
 	imageName = 'puscassebi/productsservice:s1'
