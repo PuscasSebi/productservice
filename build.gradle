@@ -25,6 +25,8 @@ dependencies {
 	implementation(platform("software.amazon.awssdk:bom:2.21.15"))
 	implementation("software.amazon.awssdk:dynamodb")
 	implementation("software.amazon.awssdk:dynamodb-enhanced")
+	implementation("software.amazon.awssdk:sns")
+
 	implementation("com.amazonaws:aws-xray-recorder-sdk-spring:2.14.0")
 	implementation("com.amazonaws:aws-xray-recorder-sdk-aws-sdk-v2:2.14.0")
 
@@ -48,7 +50,7 @@ tasks.register("unpack", Copy) {
 	into("build/libs")
 }
 
-jib.to.image = 'productsservice:7.0.0'
+jib.to.image = 'productsservice:8.0.0'
 
 tasks.named("bootBuildImage") {
 	imageName = 'puscassebi/productsservice:s1'
