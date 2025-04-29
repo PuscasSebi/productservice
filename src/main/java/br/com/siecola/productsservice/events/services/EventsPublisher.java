@@ -19,6 +19,7 @@ import software.amazon.awssdk.services.sns.model.Topic;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -56,6 +57,10 @@ public class EventsPublisher {
     }
 
     private CompletableFuture<PublishResponse> sendEvent(String data, EventType eventType) {
+        String requestId = ThreadContext.get("requestId");
+        if (requestId == null){
+            requestId = UUID.randomUUID().toString();
+        }
         return this.snsAsyncClient.publish(PublishRequest.builder()
                         .message(data)
                         .messageAttributes(Map.of(
@@ -65,7 +70,7 @@ public class EventsPublisher {
                                         .build(),
                                 "requestId", MessageAttributeValue.builder()
                                                 .dataType("String")
-                                                .stringValue(ThreadContext.get("requestId"))
+                                                .stringValue(requestId)
                                         .build(),
                                 "traceId", MessageAttributeValue.builder()
                                                 .dataType("String")

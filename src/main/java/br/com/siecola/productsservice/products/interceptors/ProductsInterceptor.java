@@ -26,7 +26,7 @@ public class ProductsInterceptor implements HandlerInterceptor {
             String next = iterator.next();
             headerMaps.put(next, request.getHeader(next));
         }
-        LOG.info("all headers={}", headerMaps);
+       // LOG.info("all headers={}", headerMaps);
         //inject request id to all logs
         return true;
     }
